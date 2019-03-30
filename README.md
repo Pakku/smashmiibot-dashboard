@@ -1,1 +1,1 @@
-# smashbot-dashboard
+# amiibot-dashboard
