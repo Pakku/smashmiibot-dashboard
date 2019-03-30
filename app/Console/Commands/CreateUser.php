@@ -44,9 +44,22 @@ class CreateUser extends Command
     {
         $this->askData();
 
-        $this->validateData();
+        try {
+            $this->validateData();
 
-        $this->createUser();
+            $this->createUser();
+        } catch (ValidationException $e) {
+            $this->error($e->getMessage());
+            foreach ($e->errors() as $errorField) {
+                foreach ($errorField as $error) {
+                    $this->error($error);
+                }
+            }
+
+            return 2;
+        }
+
+        
     }
 
     private function askData()
@@ -59,21 +72,14 @@ class CreateUser extends Command
 
     private function validateData()
     {
-        try {
+        
             $validator = $this->validator([
                 'name' => $this->name,
                 'email' => $this->email,
                 'password' => $this->password,
                 'password_confirmation' => $this->passwordConfirmation,
             ])->validate();
-        } catch (ValidationException $e) {
-            $this->error($e->getMessage());
-            foreach ($e->errors() as $errorField) {
-                foreach ($errorField as $error) {
-                    $this->error($error);
-                }
-            }
-        }
+        
         
     }
 
