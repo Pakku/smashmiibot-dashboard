@@ -16,3 +16,7 @@ script:
 
   - php artisan migrate --seed --env=testing
   - ./vendor/bin/phpunit --coverage-clover clover.xml
+
+notifications:
+  email:
+    - quentyaiden@gmail.com
