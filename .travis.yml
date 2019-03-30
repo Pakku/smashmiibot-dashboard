@@ -1,1 +1,15 @@
+sudo: required
 language: php
+dist: trusty
+
+addons:
+  chrome: stable
+
+install:
+  - travis_retry composer install --no-interaction --prefer-dist --no-suggest
+
+script:
+  - php artisan serve &
+
+  - php artisan migrate --seed --env=testing
+  - ./vendor/bin/phpunit --coverage-clover clover.xml
