@@ -8,6 +8,9 @@ addons:
 install:
   - travis_retry composer install --no-interaction --prefer-dist --no-suggest
 
+before_script:
+  - touch ./database/test.sqlite
+
 script:
   - php artisan serve &
 
