@@ -16,10 +16,9 @@ script:
 
   - php artisan migrate --seed --env=testing
   - mkdir -p build/logs
-  - ./vendor/bin/phpunit --coverage-clover clover.xml
+  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
 
 after_success:
-  - ls -l build/logs
   - travis_retry php vendor/bin/php-coveralls -v
 
 notifications:
