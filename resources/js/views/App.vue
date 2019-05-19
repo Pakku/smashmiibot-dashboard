@@ -13,5 +13,26 @@
 	</v-app>
 </template>
 <script>
-	export default {};
+	export default {
+		data: function () {
+			return {
+				user: undefined,
+			}
+		},
+		mounted: function () {
+			if (!this.user) {
+				this.$router.push({ name: 'login'});
+			} else {
+				console.log(this.user);
+			}
+		},
+		watch: {
+			$route (to, from) {
+				if (to.name!='login' && !this.user) {
+					console.log('you have to login');
+					this.$router.push({ name: 'login'});
+				}
+			}
+		}
+	};
 </script>
