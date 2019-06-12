@@ -1861,6 +1861,16 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     }
+  },
+  methods: {
+    logout: function logout() {
+      localStorage.removeItem('accessToken');
+      window.axios.defaults.headers.common['Authorization'] = undefined;
+      this.$root.$data.user = undefined;
+      this.$router.push({
+        name: 'login'
+      });
+    }
   }
 });
 
@@ -37326,7 +37336,9 @@ var render = function() {
         _vm._v("About")
       ]),
       _vm._v(" "),
-      _vm.$root.$data.user ? _c("li", [_vm._v("Logout")]) : _vm._e(),
+      _vm.$root.$data.user
+        ? _c("li", { on: { click: _vm.logout } }, [_vm._v("Logout")])
+        : _vm._e(),
       _vm._v(" "),
       _c("router-view")
     ],
