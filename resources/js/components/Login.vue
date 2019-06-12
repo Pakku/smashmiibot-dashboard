@@ -22,10 +22,14 @@ export default {
 			password: ''
 		}
 	},
+	mounted: function () {
+		console.log('you are already logged');
+		if (localStorage.getItem('accessToken')) {
+			this.$router.push({ name: 'home'});
+		}
+	},
 	methods: {
 		login () {
-			console.log(this.email);
-			console.log(this.password);
 			window.axios.post('/oauth/token', {
 				'grant_type': 'password',
 				'client_id': 2,
@@ -37,6 +41,8 @@ export default {
 			.then((response) => {
 				localStorage.setItem('accessToken', response.data.access_token);
 				window.axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`;
+				this.$root.loadUser();
+				this.$router.push({ name: 'home'});
 			});
 		}
 	}

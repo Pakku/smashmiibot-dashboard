@@ -1786,10 +1786,19 @@ __webpack_require__.r(__webpack_exports__);
       password: ''
     };
   },
+  mounted: function mounted() {
+    console.log('you are already logged');
+
+    if (localStorage.getItem('accessToken')) {
+      this.$router.push({
+        name: 'home'
+      });
+    }
+  },
   methods: {
     login: function login() {
-      console.log(this.email);
-      console.log(this.password);
+      var _this = this;
+
       window.axios.post('/oauth/token', {
         'grant_type': 'password',
         'client_id': 2,
@@ -1800,6 +1809,12 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (response) {
         localStorage.setItem('accessToken', response.data.access_token);
         window.axios.defaults.headers.common['Authorization'] = "Bearer ".concat(response.data.access_token);
+
+        _this.$root.loadUser();
+
+        _this.$router.push({
+          name: 'home'
+        });
       });
     }
   }
@@ -1823,38 +1838,23 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
-      user: undefined
-    };
+    return {};
   },
   mounted: function mounted() {
-    var _this = this;
-
-    if (!this.user) {
-      if (localStorage.getItem('accessToken')) {
-        window.axios.get('/api/user').then(function (response) {
-          console.log(response);
-        })["catch"](function (error) {
-          console.log(error);
-
-          _this.$router.push({
-            name: 'login'
-          });
-        });
-      } else {
-        this.$router.push({
-          name: 'login'
-        });
-      }
+    if (localStorage.getItem('accessToken')) {
+      this.$root.loadUser();
     } else {
-      console.log(this.user);
+      this.$router.push({
+        name: 'login'
+      });
     }
   },
   watch: {
     $route: function $route(to, from) {
-      if (to.name != 'login' && !this.user) {
+      if (to.name != 'login' && !localStorage.getItem('accessToken')) {
         console.log('you have to login');
         this.$router.push({
           name: 'login'
@@ -37326,6 +37326,8 @@ var render = function() {
         _vm._v("About")
       ]),
       _vm._v(" "),
+      _vm.$root.$data.user ? _c("li", [_vm._v("Logout")]) : _vm._e(),
+      _vm._v(" "),
       _c("router-view")
     ],
     1
@@ -52183,6 +52185,24 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   router: _js_routes_js__WEBPACK_IMPORTED_MODULE_1__["default"],
   render: function render(h) {
     return h(_js_views_App__WEBPACK_IMPORTED_MODULE_2__["default"]);
+  },
+  data: {
+    user: undefined
+  },
+  methods: {
+    loadUser: function loadUser() {
+      var _this = this;
+
+      if (!this.user) {
+        window.axios.get('/api/user').then(function (response) {
+          _this.user = response.data;
+        })["catch"](function (error) {
+          return undefined;
+        });
+      }
+
+      return this.user;
+    }
   }
 });
 /* harmony default export */ __webpack_exports__["default"] = (app);
