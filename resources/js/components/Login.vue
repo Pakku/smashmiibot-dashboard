@@ -32,8 +32,8 @@ export default {
 		login () {
 			window.axios.post('/oauth/token', {
 				'grant_type': 'password',
-				'client_id': 2,
-				'client_secret': '7afWXt9QaPTVNBiLDR5E04bn83G6MIcardsH28uj',
+				'client_id': document.head.querySelector('meta[name="smashmiibot-id"]').content,
+				'client_secret': document.head.querySelector('meta[name="smashmiibot-secret"]').content,
 				'username': this.email,
 				'password': this.password,
 				'scope': '*',
